@@ -161,6 +161,69 @@ void myfree(void *ptr, char *file, int line){
 
 int main(){
 
+    int test = atoi(argv[1]);
+    switch(test){
+        case 1:
+            //printf("%d\n", test);
+            char *obj[OBJECTS];
+            int i, j, errors = 0;
+            
+            // fill memory with objects
+            for (i = 0; i < OBJECTS; i++) {
+                obj[i] = malloc(OBJSIZE);
+            }
+            
+            // fill each object with distinct bytes
+            for (i = 0; i < OBJECTS; i++) {
+                memset(obj[i], i, OBJSIZE);
+            }
+            
+            // check that all objects contain the correct bytes
+            for (i = 0; i < OBJECTS; i++) {
+                for (j = 0; j < OBJSIZE; j++) {
+                    if (obj[i][j] != i) {
+                        errors++;
+                        printf("Object %d byte %d incorrect: %d\n", i, j, obj[i][j]);
+                    }
+                }
+            }
+            printf("%d incorrect bytes\n", errors);
+            break;
+        case 2: //tests that malloc only reserves allocated memory by attempting to allocate space once the whole memory has been allocated
+            int *a = malloc(4088);
+            int *b = malloc(8);
+            *b = 12;
+            printf("%d\n", *b);
+            break;
+        case 3: //tests that malloc correctly allocates space when there is enough
+            int *z = malloc(sizeof(int));
+            *z = 5;
+            printf("%d\n", *z);
+            break;
+        case 4: //tests that free deallocates memory
+            double *d = malloc(4088);
+            double *e = malloc(8);
+            free(d);
+            double *f = malloc(8);
+            *f = 3.3;
+            printf("%f\n", *f);
+            break;
+        case 5: //tests that malloc() and free() arrange so that adjacent free blocks are coalesced
+            int *l = malloc(sizeof(int));
+            int *m = malloc(sizeof(int));
+            int *n = malloc(sizeof(int));
+            int *o = malloc(sizeof(int));
+            int *p = malloc(sizeof(int));
+            printArray();
+            free(m);
+            free(n);
+            free(o);
+            printf("================\n\n");
+            printArray();
+            break;
+
+    }
+    
     //malloc(4090);
     //printArray();
 
@@ -175,7 +238,7 @@ int main(){
     free(p);
     free(q);*/
 
-    void *a = malloc(8);
+    /*void *a = malloc(8);
     void *b = malloc(32);
     void *c = malloc(16);
     void *d = malloc(31);
@@ -192,7 +255,7 @@ int main(){
     printArray();   
     coalesce();
     printf("========== coalesce \n"); 
-    printArray();
+    printArray();*/
 
     /*
     Test malloc function: call malloc(8): this should set the first header to be allocated with a size of 8. 
