@@ -67,3 +67,24 @@ The headers at the beginning of each chunk are 8 bytes each. An int is written t
 When a chunk is allocated, if there is at least 8 bytes of space between it and the next chunk another chunk is created and it is set as unallocated. This means that we allow for chunks with payloads of size zero to be created. We allow this because memory cannot be allocated in a space of only 8 bytes, as the header size is 8 bytes.
 
 We use a helper function called checkFree when freeing a pointer to ensure that it points to the payload of an object allocated by mymalloc(). We do this by using pointer arithmetic with the size values in the headers of each chunk in the memory and comparing those addresses to the one passed into myfree(). We also use checkFree to identify the three errors associated with myfree() by checking the allocated status of chunks and checking if the address passed into myfree() is in the memory array. In the case of any of the three errors an identifying integer is returned which myfree() uses to print the error message.
+
+memgrind.c: assesses a custom memory allocator by running varied tests, including simple byte allocations and complex patterns, to simulate real usage.
+
+Test Descriptions:
+
+  Test 1: This test measures the allocator's performance by repeatedly allocating and then immediately freeing a single byte, putting a 
+  spotlight on the overhead and efficiency of the allocator's basic operations.
+
+  Test 2: It assesses the allocator's ability to handle multiple small allocations by allocating 120 1-byte objects, storing them in an 
+  array, and then collectively freeing them, testing the allocator's batch processing capabilities.
+
+  Test 3: This test introduces randomness by alternating between allocating a 1-byte chunk and freeing a previously allocated chunk, 
+  simulating a more unpredictable and dynamic memory usage pattern to evaluate the allocator's robustness and adaptability.
+
+  StressTest 1: Designed to push the allocator to its limits, this test performs rapid, alternating allocations and deallocations of a 
+  single byte, testing the allocator's endurance and response to high-frequency memory operation requests.
+
+  StressTest 2: It challenges the allocator with allocations of random sizes between 1 and 64 bytes to test its efficiency and strategy in 
+  handling memory fragmentation and varied allocation sizes, providing insights into the allocator's performance under complex scenarios.
+
+These tests are designed to cover a broad spectrum of common and edge-case scenarios to ensure robustness and efficiency in memory allocation and deallocation.
