@@ -1,3 +1,15 @@
+Run instructions:
+
+To run memgrind.c:
+make memgrind
+./memgrind
+
+To run testcode.c:
+make testcode
+./testcode
+
+Running testcode executes the tests outlined below:
+
 Correctness test plan:
 
 Test 1:
@@ -44,3 +56,11 @@ Requirement tested: free() cannot be called a second time on the same pointer.
 Allocates a pointer p2, creates a pointer q2 of the same address, calls free on p2 and then on q2.
 Expected result: An error is printed explaining that free() cannot be called a second time on the same pointer:
 Error in testcode.c on line 118: Called free() a second time on the same pointer.
+
+mymalloc() and myfree() design notes:
+
+The headers at the beginning of each chunk are 8 bytes each. An int is written to the first 4 bytes to represent whether the chunk is allocated or not, 1 representing allocated and 0 representing unallocated. An int is written to the second 4 bytes which represents the size in bytes of the chunk's payload. This value is also used to traverse the memory.
+
+When a chunk is allocated, if there is at least 8 bytes of space between it and the next chunk another chunk is created and it is set as unallocated. This means that we allow for chunks with payloads of size zero to be created. We allow this because memory cannot be allocated in a space of only 8 bytes, as the header size is 8 bytes.
+
+We use a helper function called checkFree when freeing a pointer to ensure that it points to the payload of an object allocated by mymalloc(). We do this by using pointer arithmetic with the size values in the headers of each chunk in the memory and comparing those addresses to the one passed into myfree(). We also use checkFree to identify the three errors associated with myfree() by checking the allocated status of chunks and checking if the address passed into myfree() is in the memory array. In the case of any of the three errors an identifying integer is returned which myfree() uses to print the error message.
