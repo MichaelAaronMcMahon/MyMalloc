@@ -1,3 +1,5 @@
+Michael McMahon mam1198
+
 Run instructions:
 
 To run memgrind.c:
