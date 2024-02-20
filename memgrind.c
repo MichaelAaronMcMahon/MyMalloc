@@ -107,7 +107,7 @@ void test3() {
 }
 
 //alternating allocations and freeing
-void stresstest1() {
+void stresstest1(int iterations) {
     long startTime = getTimeInMicroseconds();
     for(int i = 0; i < iterations; i++) {
         char* ptr = (char*)mymalloc(1); // Allocate 1 byte
@@ -122,7 +122,7 @@ void stresstest1() {
 }
 
 //random-sized allocation
-void stresstest2() {
+void stresstest2(int count) {
     char* pointers[count];
     long startTime = getTimeInMicroseconds();
     for(int i = 0; i < count; i++) {
@@ -158,11 +158,11 @@ int main(int argc, char ** argv){
 
         printf("\nTEST4...\n");
 
-        stresstest1();
+        stresstest1(100);
 
         printf("\nTEST5...\n");
 
-        stresstest2();
+        stresstest2(120);
 
     return 0;
 
